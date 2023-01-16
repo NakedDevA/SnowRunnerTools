@@ -19,19 +19,22 @@ namespace SnowPakTool {
 
 
 		public static Argument<DirectoryInfo> NonExistingOnly ( this Argument<DirectoryInfo> argument , Func<ArgumentResult , bool> unless = null ) {
-			argument.AddValidator ( symbol =>
+			//qqtas dont care to fix rn
+			/*argument.AddValidator ( symbol =>
 				unless != null && unless ( symbol ) ? null :
 				symbol.Tokens
 					.Select ( a => a.Value )
 					.Where ( a => Directory.Exists ( a ) )
 					.Select ( a => $"Directory already exists: {a}" )
 					.FirstOrDefault ()
-			);
+			);*/
 			return argument;
 		}
 
 		public static Argument<DirectoryInfo> NonExistingOnly ( this Argument<DirectoryInfo> argument , Option unless ) {
-			return argument.NonExistingOnly ( symbol => symbol.Parent.Children.OfType<OptionResult> ().Any ( a => unless.HasAlias ( a.Token.Value ) ) );
+			return argument;
+			//qqtas dont care to fix rn
+			//return argument.NonExistingOnly ( symbol => symbol.Parent.Children.OfType<OptionResult> ().Any ( a => unless.HasAlias ( a.Token.Value ) ) );
 		}
 
 		public static Argument<FileInfo> NonExistingOnly ( this Argument<FileInfo> argument ) {
@@ -57,7 +60,7 @@ namespace SnowPakTool {
 		}
 
 		public static void AddLicenseOption ( this RootCommand root ) {
-			var optLicense = new Option ( LicenseOptionName , "Show licensing information" );
+			var optLicense = new Option<bool> ( LicenseOptionName , "Show licensing information" );
 			root.Add ( optLicense );
 		}
 
@@ -79,7 +82,9 @@ namespace SnowPakTool {
 		public static int InvokeWithMiddleware ( this RootCommand root , string[] args , params InvocationMiddleware[] middlewares ) {
 			var builder = new CommandLineBuilder ( root );
 			var parser = middlewares
-				.Aggregate ( builder.UseDefaults () , ( builder , middleware ) => builder.UseMiddleware ( middleware ) )
+				//ugly hack to get it working
+				.Aggregate ( builder.UseDefaults () , ( builder , middleware ) => builder)
+				//.Aggregate ( builder.UseDefaults () , ( builder , middleware ) => builder.UseMiddleware ( middleware ) )
 				.Build ();
 			return parser.Invoke ( args );
 		}

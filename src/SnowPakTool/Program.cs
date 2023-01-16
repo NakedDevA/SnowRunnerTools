@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,14 +24,14 @@ namespace SnowPakTool {
 			var cmdPakList = new Command ( "list" , "List contents of a PAK file" ) { IsHidden = true };
 			cmdPakList.AddArgument ( new Argument<FileInfo> ( "source" , "Path to the PAK file" ).ExistingOnly () );
 			cmdPakList.AddOption ( new Option<LocalHeaderField[]> ( "--local-header" ) { IsHidden = true } ); //uglifies help output
-			cmdPakList.AddOption ( new Option ( "--sort" ) );
+			cmdPakList.AddOption ( new Option<bool> ( "--sort" ) );
 			cmdPakList.Handler = CommandHandler.Create<FileInfo , LocalHeaderField[] , bool> ( DoPakList );
 			cmdPak.Add ( cmdPakList );
 
 			var cmdPakPack = new Command ( "pack" , "Pack contents of a directory into a single PAK file" );
 			cmdPakPack.AddArgument ( new Argument<DirectoryInfo> ( "source" , "Path to the directory containing files" ).ExistingOnly () );
 			cmdPakPack.AddArgument ( new Argument<FileInfo> ( "target" , "Path to a PAK file that will be created" ).NonExistingOnly () );
-			cmdPakPack.AddOption ( new Option ( "--mixed-cache-block" , "Indicates the source directory contains mixed contents of initial.pak and initial.pak\\initial.cache_block" ) );
+			cmdPakPack.AddOption ( new Option<bool> ( "--mixed-cache-block" , "Indicates the source directory contains mixed contents of initial.pak and initial.pak\\initial.cache_block" ) );
 			cmdPakPack.Handler = CommandHandler.Create<DirectoryInfo , FileInfo , bool> ( DoPakPack );
 			cmdPak.Add ( cmdPakPack );
 
@@ -45,7 +46,7 @@ namespace SnowPakTool {
 			cmdCacheBlock.Add ( cmdCacheBlockList );
 
 			var cmdCacheBlockUnpack = new Command ( "unpack" , "Unpack contents of a cache_block file into a directory" );
-			var cmdCacheBlockUnpack_AllowMixing = new Option ( "--allow-mixing" , "Allow mixing of contents for initial.pak and initial.pak\\initial.cache_block" );
+			var cmdCacheBlockUnpack_AllowMixing = new Option<bool> ( "--allow-mixing" , "Allow mixing of contents for initial.pak and initial.pak\\initial.cache_block" );
 			cmdCacheBlockUnpack.AddArgument ( new Argument<FileInfo> ( "source" , "Path to the cache_block file" ).ExistingOnly () );
 			cmdCacheBlockUnpack.AddArgument ( new Argument<DirectoryInfo> ( "target" , "Path to a directory that will be created to unpack into" ).NonExistingOnly ( unless: cmdCacheBlockUnpack_AllowMixing ) );
 			cmdCacheBlockUnpack.AddOption ( cmdCacheBlockUnpack_AllowMixing );
@@ -55,7 +56,7 @@ namespace SnowPakTool {
 			var cmdCacheBlockPack = new Command ( "pack" , "Pack contents of a directory into a single cache_block file" );
 			cmdCacheBlockPack.AddArgument ( new Argument<DirectoryInfo> ( "source" , "Path to the directory containing files" ).ExistingOnly () );
 			cmdCacheBlockPack.AddArgument ( new Argument<FileInfo> ( "target" , "Path to a cache_block file that will be created" ).NonExistingOnly () );
-			cmdCacheBlockPack.AddOption ( new Option ( "--mixed-cache-block" , "Indicates the source directory contains mixed contents of initial.pak and initial.pak\\initial.cache_block" ) );
+			cmdCacheBlockPack.AddOption ( new Option<bool> ( "--mixed-cache-block" , "Indicates the source directory contains mixed contents of initial.pak and initial.pak\\initial.cache_block" ) );
 			cmdCacheBlockPack.Handler = CommandHandler.Create<DirectoryInfo , FileInfo , bool> ( DoCacheBlockPack );
 			cmdCacheBlock.Add ( cmdCacheBlockPack );
 
@@ -65,7 +66,7 @@ namespace SnowPakTool {
 			root.Add ( cmdLoadList );
 
 			var cmdLoadListList = new Command ( "list" , "List contents of a load_list file" );
-			cmdLoadListList.AddOption ( new Option ( "--compact" , "Use compact format (internal names only)" ) );
+			cmdLoadListList.AddOption ( new Option<bool> ( "--compact" , "Use compact format (internal names only)" ) );
 			cmdLoadListList.AddArgument ( new Argument<FileInfo> ( "source" , "Path to the load_list file" ).ExistingOnly () );
 			cmdLoadListList.Handler = CommandHandler.Create<FileInfo , bool> ( DoLoadListList );
 			cmdLoadList.Add ( cmdLoadListList );
