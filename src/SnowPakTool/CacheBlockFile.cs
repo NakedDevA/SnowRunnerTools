@@ -23,7 +23,7 @@ namespace SnowPakTool {
 
 		public static string InitialCacheBlockName => "initial.cache_block";
 
-		public static string[] InitialCacheBlockDirectories { get; } = new[] { "[ps]" , "[ps_common]" , "[strings]" };
+		public static string[] InitialCacheBlockDirectories { get; } = new[] { "[ps]" , "[ps_common]" };
 
 
 		protected CacheBlockFile ( Stream stream ) {
