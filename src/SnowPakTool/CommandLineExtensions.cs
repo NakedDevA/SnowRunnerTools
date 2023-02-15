@@ -32,9 +32,9 @@ namespace SnowPakTool {
 		}
 
 		public static Argument<DirectoryInfo> NonExistingOnly ( this Argument<DirectoryInfo> argument , Option unless ) {
-			return argument;
+			//return argument;
 			//qqtas dont care to fix rn
-			//return argument.NonExistingOnly ( symbol => symbol.Parent.Children.OfType<OptionResult> ().Any ( a => unless.HasAlias ( a.Token.Value ) ) );
+			return argument.NonExistingOnly ( symbol => symbol.Parent.Children.OfType<OptionResult> ().Any ( a => unless.HasAlias ( a.Token.Value ) ) );
 		}
 
 		public static Argument<FileInfo> NonExistingOnly ( this Argument<FileInfo> argument ) {
