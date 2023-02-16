@@ -70,10 +70,10 @@ namespace SnowPakTool {
 		}
 
 		public static bool CanBeCompressed ( int index , string internalName ) {
-			return false;
-			//if ( index == 0 && LoadListName.Equals ( internalName , StringComparison.OrdinalIgnoreCase ) ) return false;
-			//if ( internalName.EndsWith ( ".pct_header" , StringComparison.OrdinalIgnoreCase ) ) return false; //these aren't compressed in the original shared_textures.pak, but that's not enough
-			//return true;
+			//return false;
+			if ( index == 0 && LoadListName.Equals ( internalName , StringComparison.OrdinalIgnoreCase ) ) return false;
+			if ( internalName.EndsWith ( ".pct_header" , StringComparison.OrdinalIgnoreCase ) ) return false; //these aren't compressed in the original shared_textures.pak, but that's not enough
+			return true;
 		}
 
 
